@@ -1,0 +1,30 @@
+converter:
+  user: conv-user
+  host: 10.50.40.78
+  directory: /home/voar/git/SCS/vmware2scs/data/test/test1
+
+esxi:
+  host: vmhost05.a.uintra.net
+  directory: /vmfs/volumes/536f131e-1584da60-0d47-80c16e72faa0/nxc-sat06dt-02
+
+openstack:
+  target:
+    flavor: SCS-8V-16
+    security_group: default
+    networks:
+      - uintra: auto
+      - anscnet: auto
+
+  env:
+    OS_AUTH_TYPE: password
+    OS_AUTH_URL: https://keystone.t.ustack.cloud:32443/v3
+    OS_IDENTITY_API_VERSION: 3
+    OS_INTERFACE: public
+    OS_PASSWORD: 123
+    OS_PROJECT_DOMAIN_NAME: Default
+    OS_PROJECT_NAME: opsTest
+    OS_PROJECT_ID: 123
+    OS_USERNAME: opsTest-admin
+    OS_USER_DOMAIN_NAME: Default
+    OS_VOLUME_API_VERSION: 3
+    OS_REGION_NAME: uStackTest
