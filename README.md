@@ -1,7 +1,7 @@
-# VMware to SCS OpenStack migration script (vmware2scs)
+# VMware to OpenStack migration script (vmware2openstack)
 
 This script may be used to migrate VMs from VMware to
-an SCS OpenStack environment.
+an OpenStack environment.
 
 The script itself must be run on a machine which has access to:
 - the ESXI host where the VM to migrated resides on
@@ -18,7 +18,7 @@ options:
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
                         Config file to use (default: None)
-  -n NAME, --name NAME  Name of the SCS server to create during migration (default: None)
+  -n NAME, --name NAME  Name of the server to create during migration (default: None)
   -fc, --forceCopy      Force copying of image files from ESXI if already present in data directory (default: False)
 ```
 
@@ -84,9 +84,9 @@ openstack:
 ## Example migration
 
 ```shell
-(venv) conv-user@converter:~/vmware2scs$ python3 main.py -c etc/migrate-glados.yaml -n glados
+(venv) conv-user@converter:~/vmware2openstack$ python3 main.py -c etc/migrate-glados.yaml -n glados
 2024-04-23 13:25:48,808 - main:INFO - Starting
-2024-04-23 13:25:48,810 - migrator:INFO - Creating migration directory at /convert/vmware2scs/glados
+2024-04-23 13:25:48,810 - migrator:INFO - Creating migration directory at /convert/vmware2openstack/glados
 2024-04-23 13:25:48,992 - migrator:INFO - Found VM glados-42 on ESXI host esxi.example.com with id 42 and path /vmfs/volumes/13371337-1584da60-0d47-80c16e72faa0/glados-42
 2024-04-23 13:25:48,992 - migrator:INFO - Checking ssh connection to ESXI host
 2024-04-23 13:25:49,274 - migrator:INFO - Openstack: network show somenet
@@ -99,17 +99,17 @@ Be very sure from here on.
         
 Proceed? [y/N] y
 2024-04-23 13:25:56,447 - migrator:INFO - VM powered off successfully
-2024-04-23 13:25:56,448 - migrator:INFO - Copying vmdk files from vmhost05.a.uintra.net:/vmfs/volumes/536f131e-1584da60-0d47-80c16e72faa0/nxc-sat06dt-02 to /convert/vmware2scs/mig2
-2024-04-23 13:25:58,808 - migrator:INFO - Progress: /convert/vmware2scs/glados/glados-42-disc0-flat.vmdk: 0%
+2024-04-23 13:25:56,448 - migrator:INFO - Copying vmdk files from vmhost05.a.uintra.net:/vmfs/volumes/536f131e-1584da60-0d47-80c16e72faa0/nxc-sat06dt-02 to /convert/vmware2openstack/mig2
+2024-04-23 13:25:58,808 - migrator:INFO - Progress: /convert/vmware2openstack/glados/glados-42-disc0-flat.vmdk: 0%
 ...
-2024-04-23 13:30:38,822 - migrator:INFO - Progress: /convert/vmware2scs/glados/glados-42-disc0-flat.vmdk: 100%
-2024-04-23 13:30:48,822 - migrator:INFO - Progress: /convert/vmware2scs/glados/glados-42-disc1-flat.vmdk: 0%
+2024-04-23 13:30:38,822 - migrator:INFO - Progress: /convert/vmware2openstack/glados/glados-42-disc0-flat.vmdk: 100%
+2024-04-23 13:30:48,822 - migrator:INFO - Progress: /convert/vmware2openstack/glados/glados-42-disc1-flat.vmdk: 0%
 ...
-2024-04-23 13:35:28,838 - migrator:INFO - Progress: /convert/vmware2scs/glados/glados-42-disc1-flat.vmdk: 100%
-2024-04-23 13:35:33,109 - migrator:INFO - Converting vmdk files in /convert/vmware2scs/glados
-2024-04-23 13:35:33,110 - migrator:INFO - Converting /convert/vmware2scs/glados/glados-42-disc0.vmdk
+2024-04-23 13:35:28,838 - migrator:INFO - Progress: /convert/vmware2openstack/glados/glados-42-disc1-flat.vmdk: 100%
+2024-04-23 13:35:33,109 - migrator:INFO - Converting vmdk files in /convert/vmware2openstack/glados
+2024-04-23 13:35:33,110 - migrator:INFO - Converting /convert/vmware2openstack/glados/glados-42-disc0.vmdk
     (100.00/100%)
-2024-04-23 13:36:37,727 - migrator:INFO - Converting /convert/vmware2scs/glados/glados-42-disc1.vmdk
+2024-04-23 13:36:37,727 - migrator:INFO - Converting /convert/vmware2openstack/glados/glados-42-disc1.vmdk
     (100.00/100%)
 2024-04-23 13:37:36,658 - migrator:INFO - Openstack: image list
 2024-04-23 13:37:37,981 - migrator:INFO - Skipping import of glados-42-disc0.vmdk.raw: already imported as 13371337-3863-49b2-aa0f-16bd7711d76e
