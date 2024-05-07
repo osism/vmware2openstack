@@ -14,6 +14,8 @@ from pyVim.connect import SmartConnect, Disconnect
 from pyVmomi import vim
 from scp import SCPClient
 
+import mount
+
 logger = logging.getLogger(__name__)
 
 
@@ -50,6 +52,7 @@ class Migrator:
         self.esxi_datastores = {}
         self.esxi_vm_path = None
         self.esxi_instance = None
+        self.raw_images = []
         self.flavor = self.config["openstack"]["target"]["flavor"].get()
         self.security_group = self.config["openstack"]["target"]["security_group"].get()
         self.security_group_id = None
@@ -74,6 +77,7 @@ class Migrator:
         #
         logger.info(f"Creating migration directory at {self.data_dir}")
         pathlib.Path(self.data_dir).mkdir(exist_ok=True)
+        pathlib.Path(f"{self.data_dir}/mnt").mkdir(exist_ok=True)
 
         # check esxi and find vm
         # also store datastores - those are required to find the path where vmdk files reside in
@@ -184,7 +188,7 @@ class Migrator:
         )
         return client
 
-    def poweroff_vm(self):
+    def _poweroff_vm(self):
         """
         Power off VM
 
@@ -256,6 +260,8 @@ class Migrator:
             )
             return
 
+        self._poweroff_vm()
+
         logger.info(
             f"Copying vmdk files from {self.esxi_host}:{self.esxi_vm_path} to {self.data_dir}"
         )
@@ -283,6 +289,7 @@ class Migrator:
                 if isfile(join(vmdk_dir, f)) and re.match("^.*disc\\d+.vmdk$", f)
             ]
             for vmdk_file in vmdk_files:
+                self.raw_images.append(f"{self.data_dir}/{vmdk_file}.raw")
                 if os.path.isfile(f"{self.data_dir}/{vmdk_file}.raw"):
                     logger.info(
                         f"Skipping, converted image {vmdk_dir}/{vmdk_file}.raw already exists"
@@ -304,16 +311,25 @@ class Migrator:
         Mounts raw images to enable user to edit files before importing images into openstack
         """
         # TODO
-        # problem: mounting LVM from loop devices is difficult :)
-        pass
+        # implement mounting of non LVM images
+
+        for raw_image in self.raw_images:
+            mounter = mount.Mount(path=raw_image, mount_root_path=f"{self.data_dir}/mnt")
+            mounter.mount()
+
+
 
     def unmount_images(self):
         """
         Unmount raw images
         """
         # TODO
-        # problem: mounting LVM from loop devices is difficult :)
-        pass
+        # implement mounting of non LVM images
+
+        for raw_image in self.raw_images:
+            mounter = mount.Mount(path=raw_image, mount_root_path=f"{self.data_dir}/mnt")
+            mounter.unmount()
+
 
     def openstack_execute(self, command):
         """

@@ -28,8 +28,7 @@ if __name__ == "__main__":
         action="store_true",
         help="Force copying of image files from ESXI if already present in data directory",
     )
-    # TODO
-    # parser.add_argument("-m", "--mount", action="store_true", help="Mount raw images after converting and stop")
+    parser.add_argument("-m", "--mount", action="store_true", help="Mount raw images after converting and stop")
 
     args = parser.parse_args()
     options = vars(args)
@@ -50,8 +49,13 @@ if __name__ == "__main__":
 
     migrator = migrator.Migrator(config=config, name=options["name"], arguments=options)
     migrator.initialize()
-    migrator.poweroff_vm()
     migrator.copy_images()
     migrator.convert_images()
+    if options["mount"]:
+        migrator.mount_images()
+        logger.info("Mounted all images, have fun!")
+        sys.exit(0)
+    else:
+        migrator.unmount_images()
     migrator.import_images()
     migrator.create_server()
