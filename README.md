@@ -10,7 +10,7 @@ The script itself must be run on a machine which has access to:
 ## Usage
 
 ```shell
-usage: vmware2scs.py [-h] -c CONFIG -n NAME [-fc]
+usage: vmware2openstack.py [-h] -c CONFIG -n NAME [-fc]
 
 VMWare to OpenStack move script
 
@@ -84,7 +84,7 @@ openstack:
 ## Example migration
 
 ```shell
-(venv) conv-user@converter:~/vmware2openstack$ python3 main.py -c etc/migrate-glados.yaml -n glados
+(venv) conv-user@converter:~/vmware2openstack$ python3 vmware2openstack.py -c etc/migrate-glados.yaml -n glados
 2024-04-23 13:25:48,808 - main:INFO - Starting
 2024-04-23 13:25:48,810 - migrator:INFO - Creating migration directory at /convert/vmware2openstack/glados
 2024-04-23 13:25:48,992 - migrator:INFO - Found VM glados-42 on ESXI host esxi.example.com with id 42 and path /vmfs/volumes/13371337-1584da60-0d47-80c16e72faa0/glados-42
